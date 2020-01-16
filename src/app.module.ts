@@ -3,6 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {TypeOrmModule} from '@nestjs/typeorm';
 
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/user.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -12,9 +15,10 @@ import {TypeOrmModule} from '@nestjs/typeorm';
       username: 'root',
       password: '123456',
       database: 'cnode_nestjs',
-      entities: [],
+      entities: [UserEntity],
       synchronize: true,
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
