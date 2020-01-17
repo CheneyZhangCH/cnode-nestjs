@@ -20,16 +20,19 @@ export class UserService {
     const email = telOrEmail.indexOf('@') > -1 ? telOrEmail : '';
     const tel = telOrEmail.indexOf('@') > -1 ? '' : telOrEmail;
 
+    console.log(email);
+    console.log(tel);
+
     const emailCheck = await this.userRepository.find({
       where: [{ email }],
     });
-    if (emailCheck.length > 0) {
-      return { code: 404, errorMsg: '邮箱已经注册' };
-    }
     const telCheck = await this.userRepository.find({
       where: [{ tel }],
     });
-    if (telCheck.length > 0) {
+    if (emailCheck.length > 0 && emailCheck.every(user => user.email)) {
+      return { code: 404, errorMsg: '邮箱已经注册' };
+    }
+    if (telCheck.length > 0 && telCheck.every(user => user.tel)) {
       return { code: 404, errorMsg: '手机号码已经注册' };
     }
     console.log('emailCheck', emailCheck);
