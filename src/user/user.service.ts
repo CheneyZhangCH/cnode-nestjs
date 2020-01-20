@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
@@ -15,40 +15,40 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  async create(createUserDto: CreateUserDto) {
-    const { telOrEmail, password } = createUserDto;
-    const email = telOrEmail.indexOf('@') > -1 ? telOrEmail : '';
-    const tel = telOrEmail.indexOf('@') > -1 ? '' : telOrEmail;
+  async createUser(createUserDto: CreateUserDto) {
+    const { username, password } = createUserDto;
 
-    console.log(email);
-    console.log(tel);
-
-    const emailCheck = await this.userRepository.find({
-      where: [{ email }],
-    });
-    const telCheck = await this.userRepository.find({
-      where: [{ tel }],
-    });
-    if (emailCheck.length > 0 && emailCheck.every(user => user.email)) {
-      return { code: 404, errorMsg: '邮箱已经注册' };
+    const currentUser = await this.findOneByTelOrEmail(username);
+    if (currentUser && currentUser.length > 0) {
+      throw new HttpException('电话或邮箱已经注册使用过', 400);
     }
-    if (telCheck.length > 0 && telCheck.every(user => user.tel)) {
-      return { code: 404, errorMsg: '手机号码已经注册' };
-    }
-    console.log('emailCheck', emailCheck);
-    console.log('telCheck', telCheck);
 
     const newUser = new UserEntity();
-    newUser.username = '';
     newUser.password = password;
-    newUser.email = email;
-    newUser.avatar = '';
-    newUser.tel = tel;
+    newUser.username = username;
+    if (username.indexOf('@') > -1) {
+      newUser.email = username;
+      newUser.tel = '';
+    } else {
+      newUser.email = '';
+      newUser.tel = username;
+    }
 
     return this.userRepository.save(newUser);
   }
 
-  findOne(id: number) {
+  findOneById(id: number) {
     return this.userRepository.findOne(id);
+  }
+
+  async findOneByTelOrEmail(registerTelOrEmail: string) {
+    if (registerTelOrEmail.indexOf('@') > -1) {
+      return await this.userRepository.find({
+        where: [{ email: registerTelOrEmail }],
+      });
+    }
+    return await this.userRepository.find({
+      where: [{ tel: registerTelOrEmail }],
+    });
   }
 }

@@ -17,7 +17,7 @@ export class UserController {
   @ApiOperation({ summary: '获取用户详情' })
   @Get(':id')
   async detail(@Param('id') id: number) {
-    const result = await this.userService.findOne(id);
+    const result = await this.userService.findOneById(id);
     console.log(result);
     if (result) {
       return result;
@@ -29,13 +29,13 @@ export class UserController {
   @ApiOperation({ summary: '创建用户' })
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+    return await this.userService.createUser(createUserDto);
   }
 
   @ApiOperation({ summary: '修改用户' })
   @Put(':id')
   async update(@Body() createUserDto: CreateUserDto, @Param('id') id: number) {
-    const result = await this.userService.create(createUserDto);
+    const result = await this.userService.createUser(createUserDto);
     console.log('result', result)
     if (result) {
       return { code: 200, data: result, errorMsg: '' };
@@ -46,7 +46,7 @@ export class UserController {
   @ApiOperation({ summary: '删除用户' })
   @Put(':id')
   async remove(@Param('id') id: number) {
-    const result = await this.userService.findOne(id);
+    const result = await this.userService.findOneById(id);
     console.log(result);
     if (result) {
       return { success: true };
