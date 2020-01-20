@@ -10,7 +10,6 @@ import { AppService } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
-import { CreateUserDto } from './user/dto';
 
 @Controller()
 export class AppController {

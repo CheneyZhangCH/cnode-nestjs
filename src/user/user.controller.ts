@@ -1,7 +1,16 @@
-import { Body, Controller, Get, Post, Put, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('用户')
 @Controller('user')
@@ -14,6 +23,7 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: '获取用户详情' })
   @Get(':id')
   async detail(@Param('id') id: number) {
@@ -36,7 +46,7 @@ export class UserController {
   @Put(':id')
   async update(@Body() createUserDto: CreateUserDto, @Param('id') id: number) {
     const result = await this.userService.createUser(createUserDto);
-    console.log('result', result)
+    console.log('result', result);
     if (result) {
       return { code: 200, data: result, errorMsg: '' };
     }
