@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { ArticleModule } from './article/article.module';
+import { ArticleEntity } from './article/article.entity';
 
 @Module({
   imports: [
@@ -16,11 +18,12 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: '123456',
       database: 'cnode_nestjs',
-      entities: [UserEntity],
+      entities: [UserEntity, ArticleEntity],
       synchronize: true,
     }),
     UserModule,
     AuthModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

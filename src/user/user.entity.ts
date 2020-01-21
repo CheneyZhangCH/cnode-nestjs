@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
+import { ArticleEntity } from '../article/article.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -30,4 +32,10 @@ export class UserEntity {
 
   @CreateDateColumn()
   createAt: string;
+
+  @OneToMany(
+    type => ArticleEntity,
+    article => article.author,
+  )
+  articles: ArticleEntity[];
 }

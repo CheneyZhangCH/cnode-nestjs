@@ -12,7 +12,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('用户')
+@ApiTags('用户模块')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
