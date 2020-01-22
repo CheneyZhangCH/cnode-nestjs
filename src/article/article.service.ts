@@ -2,7 +2,7 @@ import { Body, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getRepository, Repository } from 'typeorm';
 import { ArticleEntity } from './article.entity';
-import { ArticlesRO } from './article.controller';
+import { ArticleQuery, ArticlesRO, ScopeEnum } from './article.interface';
 import { CreateArticleDto } from './dto';
 import { UserEntity } from '../user/user.entity';
 
@@ -11,17 +11,40 @@ export class ArticleService {
   constructor(
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
-
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
-  async findAll(query): Promise<ArticlesRO> {
-    console.log(query);
 
-    const articles = await getRepository(ArticleEntity)
-      .createQueryBuilder('article')
-      .getMany();
-    return { articles, articlesCount: 100 };
+  async findAllArticles(
+    query: ArticleQuery,
+    userId: number,
+  ): Promise<ArticlesRO> {
+    const {
+      pageIndex = 1,
+      pageSize = 20,
+      sortBy = 'created',
+      orderBy = 'DESC',
+      scope = 'mine',
+    } = query;
+    const qb = await getRepository(ArticleEntity).createQueryBuilder('article');
+    if (scope === ScopeEnum.mine) {
+      qb.andWhere('article.author = :id', { id: userId });
+    }
+
+    const newOrderBy = /desc/gi.test(orderBy) ? 'DESC' : 'ASC';
+    qb.orderBy(`article.${sortBy}`, newOrderBy);
+    const totalCount = await qb.getCount();
+    qb.limit(pageSize).offset((pageIndex - 1) * pageSize);
+
+    const articles = await qb.getMany();
+
+    return {
+      code: 200,
+      data: articles,
+      pageIndex,
+      pageSize,
+      totalCount,
+    };
   }
 
   async create(userId: number, createArticleDto: CreateArticleDto) {
@@ -38,7 +61,6 @@ export class ArticleService {
     } else {
       author.articles = [article];
     }
-    console.log(author);
 
     await this.userRepository.save(author);
 
