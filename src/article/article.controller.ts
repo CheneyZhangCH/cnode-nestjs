@@ -1,8 +1,18 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ArticleService } from './article.service';
 import { ArticleEntity } from './article.entity';
+import { CreateArticleDto } from './dto';
+import { User } from '../user/user.decorator';
 
 export interface ArticlesRO {
   articles: ArticleEntity[];
@@ -33,4 +43,16 @@ export class ArticleController {
   //     return { code: 404, errorMsg: '未找到用户' };
   //   }
   // }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  @ApiOperation({ summary: '创建文章' })
+  async createArticles(
+    @User('id') userId: number,
+    @Body() createArticleDto: CreateArticleDto,
+  ) {
+    console.log(userId);
+    console.log(createArticleDto);
+    return await this.articleService.create(userId, createArticleDto);
+  }
 }
