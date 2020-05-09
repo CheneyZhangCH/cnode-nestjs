@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
 import { UserService } from '../user/user.service'
 import { JwtService } from '@nestjs/jwt'
 
@@ -10,9 +10,13 @@ export class AuthService {
     const user = await this.userService.findOneByTel(tel)
     console.log('validateUser', user)
     if (user && user.length > 0 && user[0].password === password) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user[0]
       console.log('result', result)
       return result
+    }
+    if (user && user.length > 0 && user[0].password !== password) {
+      throw new HttpException('密码错误', 400)
     }
     return await this.userService.createUser({ username: tel, password })
   }
@@ -21,7 +25,11 @@ export class AuthService {
     console.log('auth login', user)
     const payload = { username: user.username, sub: user.id }
     return {
-      access_token: this.jwtService.sign(payload),
+      code: 200,
+      data: {
+        ...user,
+        token: this.jwtService.sign(payload),
+      },
     }
   }
 }

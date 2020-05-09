@@ -19,6 +19,7 @@ module.exports = {
     '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/camelcase': 'off',
     'react/prop-types': 0,
     '@typescript-eslint/no-use-before-define': [
       'error',
