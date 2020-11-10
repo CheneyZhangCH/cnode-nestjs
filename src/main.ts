@@ -5,6 +5,8 @@ import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as rateLimit from 'express-rate-limit'
 
+import { logger } from './middleware/logger.middleware'
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const options = new DocumentBuilder()
@@ -24,6 +26,8 @@ async function bootstrap() {
         max: 100, // limit each IP to 100 requests per windowMs
       }),
     )
+    .use(logger)
+
   await app.listen(3000)
 }
 
