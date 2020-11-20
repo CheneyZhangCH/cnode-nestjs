@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #image_version=`date +%Y%m%d%H%M`;
-
+# 启动docker
+systemctl start docker
 # 关闭容器
 docker-compose stop || true;
 # 删除容器
