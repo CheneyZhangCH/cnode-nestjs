@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { UserModule } from './user/user.module';
-import { UserEntity } from './user/user.entity';
-import { AuthModule } from './auth/auth.module';
-import { ArticleModule } from './article/article.module';
-import { ArticleEntity } from './article/article.entity';
+import { UserModule } from './user/user.module'
+import { UserEntity } from './user/user.entity'
+import { AuthModule } from './auth/auth.module'
+import { ArticleModule } from './article/article.module'
+import { ArticleEntity } from './article/article.entity'
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { ArticleEntity } from './article/article.entity';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
+      username: 'cnode',
       password: '123456',
       database: 'cnode_nestjs',
       entities: [UserEntity, ArticleEntity],
