@@ -9,7 +9,7 @@ export class AppController {
   constructor(private readonly appService: AppService, private readonly authService: AuthService) {}
 
   @ApiTags('默认')
-  @Get()
+  @Get('api')
   getHello(): string {
     return this.appService.getHello()
   }
