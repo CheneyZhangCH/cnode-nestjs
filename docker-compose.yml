@@ -8,3 +8,5 @@ services:
     image: node:12.14.1                   # 镜像名称
     container_name: nodejs          # 容器名称
     restart: always                 # 重启方式
+    ports:                          # 映射端口
+      - "3000:3000"
