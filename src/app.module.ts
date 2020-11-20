@@ -13,7 +13,7 @@ import { ArticleEntity } from './article/article.entity'
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: '47.113.201.245',
       port: 3306,
       username: 'cnode',
       password: '123456',
