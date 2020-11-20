@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  nodejs:
+    build:                          # 这里指的是我们刚刚撸的 Dockerfile 文件
+      context: .
+      dockerfile: Dockerfile
+    image: node:12.14.1                   # 镜像名称
+    container_name: nodejs          # 容器名称
+    restart: always                 # 重启方式
