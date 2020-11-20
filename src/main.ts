@@ -18,6 +18,7 @@ async function bootstrap() {
   SwaggerModule.setup('api-docs', app, document)
   app.enableCors()
   app
+    .setGlobalPrefix('api')
     .use(cookieParser())
     .use(helmet())
     .use(

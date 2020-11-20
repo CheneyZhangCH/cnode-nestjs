@@ -9,14 +9,14 @@ export class AppController {
   constructor(private readonly appService: AppService, private readonly authService: AuthService) {}
 
   @ApiTags('默认')
-  @Get('api')
+  @Get()
   getHello(): string {
     return this.appService.getHello()
   }
 
   @ApiTags('登录')
   @UseGuards(AuthGuard('local'))
-  @Post('api/auth/login')
+  @Post('auth/login')
   async login(@Request() req) {
     console.log('login req.user', req.user)
     return this.authService.login(req.user)
